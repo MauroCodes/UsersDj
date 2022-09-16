@@ -1,9 +1,19 @@
-from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
+import json
 from unipath import Path 
 
 BASE_DIR = Path(__file__).ancestor(3)
 
-SECRET_KEY = 'django-insecure-bci+d+u*l2u+#cjsg@^5l6h0m_r#0x79b2x4mywcbaj^p^21l@'
+with open("secret.json") as f :
+    secret = json.loads(f.read())
+def get_secret(secret_name, secrets=secret):
+    try: 
+        return secrets[secret_name]
+    except:
+        msg = "Could not find secret %S" % secret_name
+        raise ImproperlyConfigured(msg)
+
+SECRET_KEY = get_secret("SECRET_KEY")
 
 DJANGO_APPS = (
     'django.contrib.admin',
