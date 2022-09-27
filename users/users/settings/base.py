@@ -1,17 +1,20 @@
 from django.core.exceptions import ImproperlyConfigured
 import json
-from unipath import Path 
+from unipath import Path
 
 BASE_DIR = Path(__file__).ancestor(3)
 
-with open("secret.json") as f :
+with open("secret.json") as f:
     secret = json.loads(f.read())
+
+
 def get_secret(secret_name, secrets=secret):
-    try: 
+    try:
         return secrets[secret_name]
     except:
         msg = "Could not find secret %S" % secret_name
         raise ImproperlyConfigured(msg)
+
 
 SECRET_KEY = get_secret("SECRET_KEY")
 
@@ -25,7 +28,9 @@ DJANGO_APPS = (
     'django.contrib.postgres',
 )
 
-LOCAL_APPS = ()
+LOCAL_APPS = (
+    'applications.users',
+)
 
 THIRD_PARTY_APPS = ()
 
@@ -75,6 +80,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = "users.User"
 
 LANGUAGE_CODE = 'en-us'
 
